@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ plot.filename }}</title>
+
+    <!-- Plotly JavaScript -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <style>
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            background: #303030;
+        }
+
+        .graph-container {
+            width: 95%;
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 30px 0;
+            box-sizing: border-box;
+        }
+
+        .graph-container > div {
+            width: 100% !important;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="graph-container">
+
+        {{ plot.plot_html|safe }}
+
+    </div>
+
+</body>
+
+</html>

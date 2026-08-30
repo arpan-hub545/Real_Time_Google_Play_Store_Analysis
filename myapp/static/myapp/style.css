@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #444;
+}
+
+
+.header img {
+    height: 60px;
+    width: auto;
+}
+
+
+.header h1 {
+    margin: 0;
+    font-size: 32px;
+    color: white;
+}
+
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+
+.plot-container {
+    border: 2px solid #555;
+    margin: 10px;
+    padding: 10px;
+
+    width: 400px;
+    height: 300px;
+
+    overflow: hidden;
+    position: relative;
+
+    cursor: pointer;
+
+    background-color: #222;
+}
+
+
+.plot {
+    width: 100%;
+    height: 100%;
+}
+
+
+.insights {
+    display: none;
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    background-color: rgba(0, 0, 0, 0.75);
+
+    color: white;
+
+    padding: 8px;
+
+    border-radius: 5px;
+
+    font-size: 12px;
+
+    max-width: 180px;
+}
+
+
+.plot-container:hover .insights {
+    display: block;
+}
+
+.plot-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.plot-link:hover {
+    color: inherit;
+}
+
+.graph-page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #333;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+}
+
+.graph-page .plotly-graph-div {
+    width: 90vw !important;
+    height: 85vh !important;
+}
