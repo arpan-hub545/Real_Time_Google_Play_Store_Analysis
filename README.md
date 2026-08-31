@@ -19,29 +19,6 @@ Project Objective -
         xii) Differences between average ratings, reviews, installs, and revenue
 
 
-Technologies Used - 
-
-Technology                                                       Purpose
-
-Python                                                           Core programming and data analysis
-
-Pandas                                                           Data cleaning, transformation, grouping and aggregation
-
-NumPy                                                            Numerical calculations and feature engineering
-
-Plotly Express                                                   Interactive charts and dashboard visualizations
-
-Plotly Graph Objects                                             Advanced/custom interactive visualizations
-
-NLTK VADER                                                       Sentiment analysis of user reviews
-
-Django                                                           Web application and dashboard backend
-
-Pytz                                                             IST-based time-window logic
-
-HTML/CSS                                                         Dashboard presentation layer
-
-
 Dashboard Visualizations - 
     The dashboard contains 16 analytical visualizations.
 
