@@ -10,6 +10,7 @@ nltk.download("vader_lexicon")
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import os
 import webbrowser
+from django.utils import timezone
 from datetime import datetime
 import pytz
 import joblib
@@ -377,10 +378,10 @@ merged_data['Category_Graph'] = (merged_data['Category'].map(category_translatio
 
 merged_data['Average_Rating'] = merged_data.groupby('App')['Rating'].transform('mean')
 
-fig11_datetime = pytz.timezone('Asia/Kolkata')
-fig11_now = datetime.now(fig11_datetime)
+fig11_datetime = timezone.localtime()
+fig11_now = fig11_datetime.hour
 
-if 17 <= fig11_now.hour < 19:
+if 17 <= fig11_now < 19:
     fig11 = px.scatter(
         merged_data,
         x = 'Size',
@@ -676,10 +677,10 @@ apps_data1['Highlight'] = apps_data1['Installs'].apply(
     lambda x: "Above 1 Million" if x > 1000000 else "Below 1 Million"
 )
 
-fig12_datetime = pytz.timezone('Asia/Kolkata')
-fig12_now = datetime.now(fig12_datetime)
+fig12_datetime = timezone.localtime()
+fig12_now = fig12_datetime.hour
 
-if 18 <= fig12_now.hour < 20:
+if 18 <= fig12_now < 20:
     fig12 = px.choropleth(
         apps_data1,
         locations = 'Country',
@@ -746,10 +747,10 @@ apps_data2 = (apps_data2.groupby(['Month','Category_Graph']).agg(Total_Installs=
 apps_data2['Growth'] = apps_data2['Total_Installs'].pct_change()*100
 growth = apps_data2[apps_data2['Growth'] > 20]
 
-fig13_datetime = pytz.timezone('Asia/Kolkata')
-fig13_now = datetime.now(fig13_datetime)
+fig13_datetime = timezone.localtime()
+fig13_now = fig13_datetime.hour
 
-if 18 <= fig13_now.hour < 21:
+if 18 <= fig13_now < 21:
     fig13 = px.line(
         growth,
         x = 'Month',
@@ -820,10 +821,10 @@ growth1 = growth1.sort_values(['Month','Cumulative Installs'])
 growth1['Growth'] = (growth1.groupby('Category Graph')['Cumulative Installs'].pct_change()*100)
 growth1 = growth1[growth1['Cumulative Installs'] > 25]
 
-fig14_datetime = pytz.timezone('Asia/Kolkata')
-fig14_now = datetime.now(fig14_datetime)
+fig14_datetime = timezone.localtime()
+fig14_now = fig14_datetime.hour
 
-if 16 <= fig14_now.hour < 18:
+if 16 <= fig14_now < 18:
     fig14 = px.area(
         growth1,
         x = 'Month',
@@ -892,10 +893,10 @@ apps_data4 = apps_data4.melt(
 
 apps_data4['Normalized Data'] = apps_data4.groupby('Metric')['Value'].transform(lambda x: (x/x.max())*100)
 
-fig15_datetime = pytz.timezone('Asia/Kolkata')
-fig15_now = datetime.now(fig15_datetime)
+fig15_datetime = timezone.localtime()
+fig15_now = fig15_datetime.hour
 
-if 15 <= fig15_now.hour < 17:
+if 15 <= fig15_now < 17:
     fig15 = px.bar(
         apps_data4,
         x = 'Category',
@@ -958,10 +959,10 @@ apps_data5 = apps_data5[apps_data5['Category'].isin(dual_axis)].copy()
 apps_data5 = (apps_data5.groupby(['Category','Type']).agg(Average_Installs=('Installs','mean'),
                                                         Average_Revenue=('Revenue','mean')).reset_index())
 
-fig16_datetime = pytz.timezone('Asia/Kolkata')
-fig16_now = datetime.now(fig16_datetime)
+fig16_datetime = timezone.localtime()
+fig16_now = fig16_datetime.hour
 
-if 13 <= fig16_now.hour < 14:
+if 13 <= fig16_now < 14:
     fig16 = go.Figure()
 
     fig16.add_trace(
