@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Project Report | Real-Time Google Play Store Analysis</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           HEADER
+        ========================== */
+
+        .header {
+            background: linear-gradient(135deg, #0f172a, #1d4ed8);
+            color: white;
+            padding: 70px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .header h2 {
+            font-size: 22px;
+            font-weight: 400;
+            color: #dbeafe;
+            margin-bottom: 25px;
+        }
+
+        .author-info {
+            font-size: 16px;
+            color: #e2e8f0;
+        }
+
+        .header-buttons {
+            margin-top: 30px;
+        }
+
+        .header-buttons a {
+            display: inline-block;
+            text-decoration: none;
+            padding: 12px 22px;
+            margin: 5px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .dashboard-btn {
+            background: white;
+            color: #1d4ed8;
+        }
+
+        .github-btn {
+            background: #111827;
+            color: white;
+        }
+
+        .header-buttons a:hover {
+            transform: translateY(-3px);
+        }
+
+        /* =========================
+           PAGE LAYOUT
+        ========================== */
+
+        .page-wrapper {
+            display: flex;
+            max-width: 1450px;
+            margin: 0 auto;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================== */
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 30px 20px;
+            border-right: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: #1d4ed8;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 9px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            color: #2563eb;
+            padding-left: 5px;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================== */
+
+        .content {
+            flex: 1;
+            padding: 45px;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .section h2 {
+            color: #1d4ed8;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 12px;
+            margin-bottom: 22px;
+            font-size: 27px;
+        }
+
+        .section h3 {
+            color: #0f172a;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .section ul,
+        .section ol {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+        }
+
+        /* =========================
+           CARDS
+        ========================== */
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .card h4 {
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        /* =========================
+           ARCHITECTURE
+        ========================== */
+
+        .architecture {
+            background: #0f172a;
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 17px;
+            margin: 20px 0;
+            line-height: 2;
+        }
+
+        .arrow {
+            color: #60a5fa;
+            font-weight: bold;
+            padding: 0 5px;
+        }
+
+        /* =========================
+           GRAPH CARDS
+        ========================== */
+
+        .graph-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: 0.25s;
+        }
+
+        .graph-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .graph-number {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .significance {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin-top: 12px;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        /* =========================
+           TECHNOLOGY TAGS
+        ========================== */
+
+        .tech-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .tech {
+            background: #dbeafe;
+            color: #1e3a8a;
+            padding: 9px 16px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* =========================
+           TABLE
+        ========================== */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media(max-width: 900px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 30px;
+            }
+
+            .section {
+                padding: 22px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<header class="header">
+
+    <h1>Real-Time Google Play Store Analysis</h1>
+
+    <h2>Project Report</h2>
+
+    <div class="author-info">
+        <p><strong>Author:</strong> Arpan Das</p>
+        <p><strong>Report Date:</strong> 31 August 2026</p>
+    </div>
+
+    <div class="header-buttons">
+
+        <a href="{% url 'dashboard' %}" class="dashboard-btn">
+            ← Back to Dashboard
+        </a>
+
+        <a
+            href="https://github.com/arpan-hub545/Real_Time_Google_Play_Store_Analysis"
+            target="_blank"
+            class="github-btn"
+        >
+            View GitHub Repository
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="page-wrapper">
+
+
+<!-- ================================
+     SIDEBAR
+================================ -->
+
+<aside class="sidebar">
+
+    <h3>Contents</h3>
+
+    <ul>
+
+        <li><a href="#abstract">1. Abstract</a></li>
+
+        <li><a href="#introduction">2. Introduction</a></li>
+
+        <li><a href="#problem">3. Problem Statement</a></li>
+
+        <li><a href="#objectives">4. Objectives</a></li>
+
+        <li><a href="#dataset">5. Dataset & Preparation</a></li>
+
+        <li><a href="#technology">6. Technology Stack</a></li>
+
+        <li><a href="#architecture">7. System Architecture</a></li>
+
+        <li><a href="#graphs">8. Graphical Analysis</a></li>
+
+        <li><a href="#realtime">9. Real-Time Feature</a></li>
+
+        <li><a href="#django">10. Django Application</a></li>
+
+        <li><a href="#insights">11. Business Insights</a></li>
+
+        <li><a href="#strengths">12. Strengths</a></li>
+
+        <li><a href="#limitations">13. Limitations</a></li>
+
+        <li><a href="#future">14. Future Scope</a></li>
+
+        <li><a href="#conclusion">15. Conclusion</a></li>
+
+        <li><a href="#repository">16. Repository</a></li>
+
+        <li><a href="#references">17. References</a></li>
+
+    </ul>
+
+</aside>
+
+
+<!-- ================================
+     MAIN CONTENT
+================================ -->
+
+<main class="content">
+
+
+<!-- ABSTRACT -->
+
+<section class="section" id="abstract">
+
+    <h2>1. Abstract</h2>
+
+    <p>
+        This project presents an interactive analytical dashboard
+        for exploring Google Play Store application data and user
+        reviews.
+    </p>
+
+    <p>
+        The system combines Python-based data preparation,
+        exploratory data analysis, Django web development and
+        interactive Plotly visualizations.
+    </p>
+
+    <p>
+        The analysis covers application categories, pricing type,
+        ratings, installations, updates, estimated revenue, genres,
+        review sentiment, application size, geographic signals,
+        growth patterns and free-versus-paid application performance.
+    </p>
+
+    <p>
+        The dashboard is presented as
+        <strong>"Google Play Store Review Analytics"</strong>
+        and contains sixteen analytical views designed to transform
+        raw Play Store records into understandable and
+        decision-oriented insights.
+    </p>
+
+</section>
+
+
+<!-- INTRODUCTION -->
+
+<section class="section" id="introduction">
+
+    <h2>2. Introduction</h2>
+
+    <p>
+        Mobile applications compete for visibility, installations,
+        user engagement and positive ratings. Google Play Store data
+        contains several variables that can be analyzed together to
+        understand the characteristics associated with application
+        popularity and commercial performance.
+    </p>
+
+    <p>
+        Instead of restricting the project to a traditional data
+        analysis notebook, this project develops a complete
+        web-based analytical solution.
+    </p>
+
+    <p>
+        The system combines dataset preprocessing, exploratory data
+        analysis, feature engineering, sentiment analysis,
+        visualization and web deployment.
+    </p>
+
+</section>
+
+
+<!-- PROBLEM -->
+
+<section class="section" id="problem">
+
+    <h2>3. Problem Statement</h2>
+
+    <p>
+        Raw Google Play Store data can be difficult to interpret
+        directly because it contains categorical, numerical,
+        textual and date-based attributes.
+    </p>
+
+    <p>
+        The project therefore aims to build a single interactive
+        analytical platform capable of cleaning the dataset,
+        calculating useful measures, visualizing relationships and
+        presenting meaningful insights.
+    </p>
+
+    <h3>Main Analytical Questions</h3>
+
+    <ol>
+
+        <li>Which app categories are most represented?</li>
+
+        <li>What proportion of applications are Free versus Paid?</li>
+
+        <li>How are application ratings distributed?</li>
+
+        <li>Which categories receive the most installations?</li>
+
+        <li>How has application update activity changed over time?</li>
+
+        <li>Which categories show greater estimated revenue potential?</li>
+
+        <li>Which application genres are most common?</li>
+
+        <li>Does application recency influence ratings?</li>
+
+        <li>Do Paid apps receive different ratings from Free apps?</li>
+
+        <li>What does user-review sentiment indicate?</li>
+
+        <li>
+            How do app size, installs, ratings, reviews,
+            geography and monetization interact?
+        </li>
+
+    </ol>
+
+</section>
+
+
+<!-- OBJECTIVES -->
+
+<section class="section" id="objectives">
+
+    <h2>4. Project Objectives</h2>
+
+    <ol>
+
+        <li>
+            Clean and standardize Google Play Store and
+            user-review datasets.
+        </li>
+
+        <li>
+            Perform exploratory data analysis using Pandas
+            and NumPy.
+        </li>
+
+        <li>
+            Engineer useful features such as estimated revenue,
+            logarithmic installs, logarithmic reviews,
+            rating groups and year.
+        </li>
+
+        <li>
+            Perform sentiment analysis using NLTK VADER.
+        </li>
+
+        <li>
+            Merge app-level and review-level information where
+            required.
+        </li>
+
+        <li>Create interactive Plotly visualizations.</li>
+
+        <li>
+            Deploy the analytical system through Django.
+        </li>
+
+        <li>
+            Present meaningful insights alongside every
+            visualization.
+        </li>
+
+        <li>
+            Implement time-window-based advanced analytical views.
+        </li>
+
+        <li>
+            Interpret findings from data analytics and
+            business perspectives.
+        </li>
+
+    </ol>
+
+</section>
+
+
+<!-- DATASET -->
+
+<section class="section" id="dataset">
+
+    <h2>5. Dataset and Data Preparation</h2>
+
+    <p>
+        The project uses two primary CSV datasets.
+    </p>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Dataset</th>
+                <th>Purpose</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Play Store Data.csv</td>
+                <td>
+                    Contains application-level information including
+                    category, installs, reviews, rating, type,
+                    price, size and update information.
+                </td>
+            </tr>
+
+            <tr>
+                <td>User Reviews.csv</td>
+                <td>
+                    Contains translated application reviews used
+                    for review and sentiment analysis.
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+    <h3>Data Cleaning</h3>
+
+    <ul>
+
+        <li>Rows without valid ratings are handled.</li>
+
+        <li>Missing application values are filled where appropriate.</li>
+
+        <li>Duplicate application records are removed.</li>
+
+        <li>Ratings are restricted to valid values up to 5.</li>
+
+        <li>
+            Reviews without translated review text are removed.
+        </li>
+
+        <li>Installs and Reviews are converted to numerical values.</li>
+
+        <li>Price information is converted to numeric form.</li>
+
+        <li>Application size is standardized into MB where possible.</li>
+
+    </ul>
+
+
+    <h3>Feature Engineering</h3>
+
+    <ul>
+
+        <li>Logarithmic Install values</li>
+
+        <li>Logarithmic Review values</li>
+
+        <li>
+            Estimated Revenue =
+            <strong>Price × Installs</strong>
+        </li>
+
+        <li>Year extracted from Last Updated</li>
+
+        <li>Application Rating Groups</li>
+
+        <li>VADER sentiment compound score</li>
+
+    </ul>
+
+</section>
+
+
+<!-- TECHNOLOGY -->
+
+<section class="section" id="technology">
+
+    <h2>6. Technology Stack</h2>
+
+    <div class="tech-container">
+
+        <span class="tech">Python</span>
+
+        <span class="tech">Pandas</span>
+
+        <span class="tech">NumPy</span>
+
+        <span class="tech">Matplotlib</span>
+
+        <span class="tech">Seaborn</span>
+
+        <span class="tech">Plotly</span>
+
+        <span class="tech">NLTK VADER</span>
+
+        <span class="tech">Django</span>
+
+        <span class="tech">HTML</span>
+
+        <span class="tech">CSS</span>
+
+        <span class="tech">SQLite</span>
+
+        <span class="tech">Docker</span>
+
+        <span class="tech">PythonAnywhere</span>
+
+    </div>
+
+</section>
+
+
+<!-- ARCHITECTURE -->
+
+<section class="section" id="architecture">
+
+    <h2>7. System Architecture</h2>
+
+    <p>
+        The project follows an analytical web-application pipeline.
+    </p>
+
+    <div class="architecture">
+
+        Raw CSV Files
+
+        <span class="arrow">→</span>
+
+        Pandas Pre-processing
+
+        <span class="arrow">→</span>
+
+        Feature Engineering
+
+        <span class="arrow">→</span>
+
+        Analytical Aggregation
+
+        <span class="arrow">→</span>
+
+        Plotly Figures
+
+        <span class="arrow">→</span>
+
+        HTML
+
+        <span class="arrow">→</span>
+
+        Django
+
+        <span class="arrow">→</span>
+
+        Web Dashboard
+
+    </div>
+
+    <p>
+        The analytical module processes the datasets and generates
+        Plotly visualizations. Django views pass these generated
+        visualization containers to HTML templates where they are
+        displayed to users.
+    </p>
+
+</section>
+
+
+<!-- GRAPHS -->
+
+<section class="section" id="graphs">
+
+    <h2>8. Graphical Analysis and Findings</h2>
+
+    <p>
+        The dashboard contains sixteen analytical visualizations.
+        The first ten represent the core exploratory analysis while
+        the remaining graphs use additional filtering,
+        transformations, growth analysis, geographical inference
+        and time-based conditions.
+    </p>
+
+
+    <!-- GRAPH 1 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 1</span>
+
+        <h3>Top Categories on the Play Store</h3>
+
+        <p>
+            A bar chart identifies the ten most frequently occurring
+            application categories.
+        </p>
+
+        <p>
+            <strong>Finding:</strong>
+            Tools, Entertainment and Productivity are among the
+            dominant categories.
+        </p>
+
+        <div class="significance">
+            <strong>Analytical significance:</strong>
+            Category concentration helps developers understand
+            highly competitive application segments.
+        </div>
+
+    </div>
+
+
+    <!-- GRAPH 2 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 2</span>
+
+        <h3>App Type Distribution</h3>
+
+        <p>
+            A pie chart compares Free and Paid applications.
+        </p>
+
+        <p>
+            <strong>Finding:</strong>
+            Most applications in the dataset are Free.
+        </p>
+
+        <div class="significance">
+            The result highlights the importance of alternative
+            monetization strategies such as advertisements,
+            subscriptions and in-app purchases.
+        </div>
+
+    </div>
+
+
+    <!-- GRAPH 3 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 3</span>
+
+        <h3>Rating Distribution</h3>
+
+        <p>
+            A histogram represents the distribution of application
+            ratings.
+        </p>
+
+        <p>
+            Ratings are concentrated toward the higher end of the
+            rating scale, indicating generally favourable user
+            evaluations.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 4 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 4</span>
+
+        <h3>Installs by Category</h3>
+
+        <p>
+            The visualization calculates total application
+            installations by category.
+        </p>
+
+        <p>
+            <strong>Finding:</strong>
+            Social and Communication applications demonstrate
+            particularly strong installation volumes.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 5 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 5</span>
+
+        <h3>Number of Updates Over the Years</h3>
+
+        <p>
+            A line chart shows application update activity
+            over time.
+        </p>
+
+        <p>
+            The analysis indicates increasing update activity,
+            suggesting continued maintenance and development of
+            applications.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 6 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 6</span>
+
+        <h3>Estimated Revenue by Category</h3>
+
+        <p>
+            Estimated revenue is calculated using:
+        </p>
+
+        <p>
+            <strong>Estimated Revenue = Price × Installs</strong>
+        </p>
+
+        <p>
+            Business and Productivity are highlighted as categories
+            showing strong estimated revenue potential.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 7 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 7</span>
+
+        <h3>Top Genres</h3>
+
+        <p>
+            Application genres are extracted and counted to identify
+            frequently represented genres.
+        </p>
+
+        <p>
+            <strong>Finding:</strong>
+            Action and Casual are among the most common genres.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 8 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 8</span>
+
+        <h3>Impact of Last Updated on Rating</h3>
+
+        <p>
+            A scatter plot compares application update dates and
+            user ratings while separating Free and Paid applications.
+        </p>
+
+        <p>
+            The relationship appears relatively weak, indicating
+            that recently updated applications do not automatically
+            achieve higher ratings.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 9 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 9</span>
+
+        <h3>Rating for Paid vs Free Apps</h3>
+
+        <p>
+            A box plot compares rating distributions between
+            Free and Paid applications.
+        </p>
+
+        <p>
+            The analysis indicates that Paid applications generally
+            show higher ratings in the dataset.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 10 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 10</span>
+
+        <h3>Sentiment Distribution</h3>
+
+        <p>
+            User review text is analyzed using the VADER
+            SentimentIntensityAnalyzer.
+        </p>
+
+        <p>
+            The review population displays mixed sentiment with
+            a slight positive tendency.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 11 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 11</span>
+
+        <h3>App Size and Average Rating by Installs</h3>
+
+        <p>
+            This advanced scatter plot examines application size,
+            ratings, installs and categories simultaneously.
+        </p>
+
+        <p>
+            Bubble size represents installs while app category is
+            distinguished visually.
+        </p>
+
+        <p>
+            The Game category displays strong installation presence
+            within the filtered dataset.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 12 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 12</span>
+
+        <h3>Global App Installs by Category</h3>
+
+        <p>
+            A choropleth map attempts to visualize installations
+            geographically using country information inferred from
+            application-name keywords.
+        </p>
+
+        <div class="warning">
+
+            <strong>Important Note:</strong>
+
+            The original dataset does not contain a Country column.
+            Therefore, country information was generated using
+            application-name keywords.
+
+            As a result, many records remain Unknown and this graph
+            should be interpreted as exploratory geographical
+            analysis rather than actual user-location telemetry.
+
+        </div>
+
+    </div>
+
+
+    <!-- GRAPH 13 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 13</span>
+
+        <h3>Total Installs Over Time – 20% Growth</h3>
+
+        <p>
+            This time-series visualization calculates percentage
+            growth in application installs and focuses on records
+            exceeding 20% growth.
+        </p>
+
+        <p>
+            The project identifies strong growth approximately
+            between August 2017 and September 2018.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 14 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 14</span>
+
+        <h3>Cumulative Installs Over Time – 25% Growth</h3>
+
+        <p>
+            This area chart focuses on highly rated and
+            highly engaged applications and examines cumulative
+            installations over time.
+        </p>
+
+        <p>
+            It emphasizes sustained adoption rather than individual
+            one-time changes in installation counts.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 15 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 15</span>
+
+        <h3>Average Rating and Total Review Count</h3>
+
+        <p>
+            Average ratings and total reviews are normalized
+            to a 0–100 scale to allow the two differently scaled
+            measures to be visually compared.
+        </p>
+
+        <p>
+            The graph focuses on selected high-performing
+            application categories.
+        </p>
+
+    </div>
+
+
+    <!-- GRAPH 16 -->
+
+    <div class="graph-card">
+
+        <span class="graph-number">Graph 16</span>
+
+        <h3>
+            Average Installs and Average Revenue:
+            Free vs Paid
+        </h3>
+
+        <p>
+            The final visualization compares average installs and
+            estimated revenue between Free and Paid applications.
+        </p>
+
+        <p>
+            It combines audience reach with monetization information
+            and helps determine whether higher adoption and
+            revenue occur under the same business model.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- REAL TIME -->
+
+<section class="section" id="realtime">
+
+    <h2>9. Real-Time / Time-Window Feature</h2>
+
+    <p>
+        Several advanced charts are configured to become available
+        only during particular Indian Standard Time windows.
+    </p>
+
+    <p>
+        The application checks the current
+        <strong>Asia/Kolkata</strong> time before displaying
+        selected advanced visualizations.
+    </p>
+
+    <p>
+        If the current time falls outside the configured period,
+        a placeholder visualization informs users about the
+        availability of the analytical insight.
+    </p>
+
+    <div class="warning">
+
+        <strong>Clarification:</strong>
+
+        The project reads CSV datasets stored with the application.
+        Therefore, the system provides interactive and
+        time-conditioned analysis but does not currently retrieve a
+        continuous live data feed directly from Google Play Store.
+
+    </div>
+
+</section>
+
+
+<!-- DJANGO -->
+
+<section class="section" id="django">
+
+    <h2>10. Django Web Application</h2>
+
+    <p>
+        Django provides the web presentation layer of the project.
+    </p>
+
+    <p>
+        The analytical Python module produces Plotly visualization
+        containers. Django views pass these containers to templates,
+        where the HTML fragments and corresponding insights are
+        displayed.
+    </p>
+
+    <p>
+        The project also contains individual routes for viewing
+        graph details.
+    </p>
+
+    <div class="card-grid">
+
+        <div class="card">
+
+            <h4>Django Views</h4>
+
+            <p>
+                Handle requests and pass Plotly data to templates.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>Templates</h4>
+
+            <p>
+                Display dashboard charts, graph details and
+                analytical information.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>SQLite</h4>
+
+            <p>
+                Used as the Django application's configured
+                database.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>PythonAnywhere</h4>
+
+            <p>
+                Used for deployment of the web-based analytical
+                dashboard.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- BUSINESS INSIGHTS -->
+
+<section class="section" id="insights">
+
+    <h2>11. Key Business Insights</h2>
+
+    <ol>
+
+        <li>
+            Free applications dominate the dataset, highlighting
+            the importance of alternative monetization methods.
+        </li>
+
+        <li>
+            Tools, Entertainment and Productivity are among the
+            most represented categories.
+        </li>
+
+        <li>
+            Social and Communication categories show strong
+            installation demand.
+        </li>
+
+        <li>
+            Ratings are generally concentrated toward favourable
+            values.
+        </li>
+
+        <li>
+            Developer update activity increases across the
+            observed years.
+        </li>
+
+        <li>
+            Business and Productivity demonstrate strong estimated
+            revenue potential.
+        </li>
+
+        <li>
+            Action and Casual are prominent application genres.
+        </li>
+
+        <li>
+            Update recency alone shows only a weak relationship
+            with user ratings.
+        </li>
+
+        <li>
+            Paid applications tend to receive higher ratings within
+            the project's comparison.
+        </li>
+
+    </ol>
+
+</section>
+
+
+<!-- STRENGTHS -->
+
+<section class="section" id="strengths">
+
+    <h2>12. Strengths of the Project</h2>
+
+    <div class="card-grid">
+
+        <div class="card">
+            <h4>End-to-End System</h4>
+            <p>
+                Covers raw data processing through final
+                web deployment.
+            </p>
+        </div>
+
+        <div class="card">
+            <h4>Interactive Visualizations</h4>
+            <p>
+                Uses Plotly charts rather than relying only
+                on static images.
+            </p>
+        </div>
+
+        <div class="card">
+            <h4>Natural Language Processing</h4>
+            <p>
+                VADER sentiment analysis introduces NLP-based
+                review analysis.
+            </p>
+        </div>
+
+        <div class="card">
+            <h4>Feature Engineering</h4>
+            <p>
+                Creates revenue, rating groups, logarithmic
+                variables and temporal features.
+            </p>
+        </div>
+
+        <div class="card">
+            <h4>Multiple Analytical Dimensions</h4>
+            <p>
+                Combines numerical, categorical, textual,
+                temporal and geographical analysis.
+            </p>
+        </div>
+
+        <div class="card">
+            <h4>Web Deployment</h4>
+            <p>
+                Makes analytical results accessible through
+                a Django website.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- LIMITATIONS -->
+
+<section class="section" id="limitations">
+
+    <h2>13. Project Limitations</h2>
+
+    <ol>
+
+        <li>
+            The datasets are CSV snapshots and are not continuously
+            retrieved from Google Play Store servers.
+        </li>
+
+        <li>
+            Estimated revenue uses Price × Installs and does not
+            represent actual realized revenue.
+        </li>
+
+        <li>
+            Actual revenue may be affected by taxes, regional
+            pricing, subscriptions, advertising, refunds and
+            promotional activity.
+        </li>
+
+        <li>
+            Geographic analysis is inferred from application names
+            rather than actual user-country information.
+        </li>
+
+        <li>
+            Several advanced visualizations use highly selective
+            filters and therefore represent subsets rather than
+            the entire dataset.
+        </li>
+
+        <li>
+            Time-window availability controls when charts are
+            displayed but does not represent continuous
+            collection of new Play Store data.
+        </li>
+
+    </ol>
+
+</section>
+
+
+<!-- FUTURE -->
+
+<section class="section" id="future">
+
+    <h2>14. Future Scope</h2>
+
+    <p>
+        The existing project provides a strong foundation for
+        future improvements.
+    </p>
+
+    <ul>
+
+        <li>
+            Integrate continuously updated application data.
+        </li>
+
+        <li>
+            Add predictive models for application ratings
+            and installs.
+        </li>
+
+        <li>
+            Introduce recommendation systems for application
+            category selection.
+        </li>
+
+        <li>
+            Improve geographical analysis using real
+            country-level information.
+        </li>
+
+        <li>
+            Implement advanced NLP models for review classification.
+        </li>
+
+        <li>
+            Add interactive dashboard filters for category,
+            rating, type, price and date.
+        </li>
+
+        <li>
+            Create user authentication and personalized analytics.
+        </li>
+
+        <li>
+            Add API support for programmatic access to
+            analytical results.
+        </li>
+
+    </ul>
+
+</section>
+
+
+<!-- CONCLUSION -->
+
+<section class="section" id="conclusion">
+
+    <h2>15. Conclusion</h2>
+
+    <p>
+        The Real-Time Google Play Store Analysis project
+        demonstrates how data analytics, visualization,
+        natural language processing and web development can be
+        integrated into a practical decision-support application.
+    </p>
+
+    <p>
+        The dashboard transforms Google Play Store application
+        and user-review data into sixteen interactive analyses
+        covering market structure, ratings, installations, updates,
+        estimated revenue, genres, sentiment, geographic signals,
+        growth patterns and monetization.
+    </p>
+
+    <p>
+        One of the major conclusions of the analysis is that
+        application performance cannot be explained through a
+        single metric.
+    </p>
+
+    <p>
+        Category, application type, installs, reviews, ratings,
+        update activity, app size and user sentiment provide
+        complementary perspectives when evaluating application
+        performance.
+    </p>
+
+    <p>
+        The project successfully transforms these dimensions into
+        an accessible Django-based analytical dashboard and provides
+        a foundation for future real-time data integration and
+        predictive analytics.
+    </p>
+
+</section>
+
+
+<!-- REPOSITORY -->
+
+<section class="section" id="repository">
+
+    <h2>16. Repository and Deployment</h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Component</th>
+                <th>Description</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>myapp/</td>
+                <td>
+                    Django application, analytical code,
+                    templates and static resources
+                </td>
+            </tr>
+
+            <tr>
+                <td>projectgoogleanalysis/</td>
+                <td>Django project configuration</td>
+            </tr>
+
+            <tr>
+                <td>Play Store Data.csv</td>
+                <td>Google Play Store application dataset</td>
+            </tr>
+
+            <tr>
+                <td>User Reviews.csv</td>
+                <td>User review dataset</td>
+            </tr>
+
+            <tr>
+                <td>db.sqlite3</td>
+                <td>SQLite database</td>
+            </tr>
+
+            <tr>
+                <td>Dockerfile</td>
+                <td>Containerization configuration</td>
+            </tr>
+
+            <tr>
+                <td>requirements.txt</td>
+                <td>Python dependencies</td>
+            </tr>
+
+            <tr>
+                <td>manage.py</td>
+                <td>Django project entry point</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</section>
+
+
+<!-- REFERENCES -->
+
+<section class="section" id="references">
+
+    <h2>17. References</h2>
+
+    <p>
+        <strong>GitHub Repository:</strong>
+        <br>
+
+        <a
+            href="https://github.com/arpan-hub545/Real_Time_Google_Play_Store_Analysis"
+            target="_blank"
+        >
+            Real_Time_Google_Play_Store_Analysis
+        </a>
+    </p>
+
+    <p>
+        <strong>Deployed Application:</strong>
+        <br>
+
+        <a
+            href="https://animenurdhouse.pythonanywhere.com/"
+            target="_blank"
+        >
+            Google Play Store Review Analytics
+        </a>
+    </p>
+
+    <p>
+        <strong>Main Source Modules:</strong>
+    </p>
+
+    <ul>
+
+        <li>analysis.py</li>
+
+        <li>views.py</li>
+
+        <li>settings.py</li>
+
+        <li>dashboard.html</li>
+
+    </ul>
+
+</section>
+
+
+</main>
+
+</div>
+
+
+<footer>
+
+    <p>
+        © 2026 Arpan Das |
+        Real-Time Google Play Store Analysis
+    </p>
+
+    <p>
+        Built using Python, Django, Pandas, Plotly and NLTK
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
